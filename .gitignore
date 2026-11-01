@@ -1,0 +1,4 @@
+output/*
+data/synthetic/*
+!data/synthetic/Prorocentrum micans*
+!data/synthetic/Halamphora sp*
