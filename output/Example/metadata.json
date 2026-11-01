@@ -1,0 +1,91 @@
+{
+  "source": "C:\\Users\\Joona\\Documents\\Github\\synthetic-plankton\\data\\synthetic\\Halamphora sp.stl",
+  "inspection_scene": null,
+  "geometry_coordinates": "Blender XYZ, Z-up, normalized, unrotated",
+  "scale": 2.458512242491853e-05,
+  "center": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "settings": {
+    "input_dir": "data/synthetic",
+    "output_dir": "output",
+    "render": {
+      "max_models": null,
+      "views_per_model": 1,
+      "samples_per_pixel": 128,
+      "width_px": 491,
+      "height_px": 368,
+      "denoise": true,
+      "sun_strength": 2.0,
+      "background_intensity": 0.7,
+      "noise_std": 0.015,
+      "depth_convention": "near-white",
+      "device": "AUTO",
+      "seed": 0
+    },
+    "camera": {
+      "distance_units": 0.026,
+      "focal_length_mm": 123.6,
+      "sensor_width_mm": 4.16
+    },
+    "particle": {
+      "max_dimension_units": 0.0004,
+      "diffuse_grey": 0.5
+    },
+    "model_pattern": "Halamphora sp*",
+    "save_scene": false
+  },
+  "effective_scene": {
+    "samples": 128,
+    "denoising": true,
+    "width": 491,
+    "height": 368,
+    "target_size": 0.0004,
+    "camera_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.026000000536441803
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "lens": 123.5999984741211,
+    "sensor_width": 4.159999847412109
+  },
+  "orientation_mode": "uniform",
+  "image_encoding": "8-bit single-channel grayscale",
+  "raw_depth_units": "normalized Blender scene units, not calibrated real-world units",
+  "views": [
+    {
+      "view": 0,
+      "quaternion_wxyz": [
+        0.2680708169937134,
+        0.27591603994369507,
+        -0.5356385707855225,
+        0.7517311573028564
+      ],
+      "depth_min": 0.025847183540463448,
+      "depth_max": 0.026112765073776245
+    }
+  ]
+}
