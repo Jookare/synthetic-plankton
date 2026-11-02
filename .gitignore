@@ -1,5 +1,9 @@
 output/*
 data/synthetic/*
+__marimo__/*
+
+
+# Keep
 !data/synthetic/Prorocentrum micans*
 !data/synthetic/Halamphora sp*
 !output/Example
