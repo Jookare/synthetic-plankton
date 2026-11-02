@@ -62,12 +62,27 @@ def setup(args):
     scene.view_settings.exposure = 0
     scene.view_settings.gamma = 1
 
-    # Camera calibration and target size follow data_generation_final.txt.
-    bpy.ops.object.camera_add(location=(0, 0, args.camera.distance_units))
+    # Camera positioned 500 µm from the particle
+    bpy.ops.object.camera_add(
+        location=(0, 0, args.camera.z_position)
+    )
+
     scene.camera = bpy.context.object
     cam = scene.camera.data
-    cam.lens, cam.sensor_width, cam.sensor_fit = args.camera.focal_length_mm, args.camera.sensor_width_mm, "HORIZONTAL"
-    cam.clip_start, cam.clip_end = 0.000001, 1
+
+    # select camera type based on config
+    if args.camera.type == "ORTHO":
+        cam.type = "ORTHO"
+        cam.ortho_scale = (
+            args.render.height_px / args.camera.pixels_per_um
+        ) * args.camera.unit_scale
+    else:
+        cam.type = "PERSP"
+        cam.lens = args.camera.focal_length_mm
+        cam.sensor_width = args.camera.sensor_width_mm
+        cam.sensor_fit = "HORIZONTAL"
+
+    cam.clip_start, cam.clip_end = args.camera.unit_scale, 10
 
     # Coaxial headlight: rays travel along the camera's viewing axis.
     # Disable cast shadows; diffuse surface orientation still gives shape cues.
@@ -283,18 +298,25 @@ def render_model(path, destination, args, scene, mat, depth):
     bpy.context.view_layer.update()
     
     # Bounding-box center and one uniform scale preserve the source proportions.
-    points = [o.matrix_world @ Vector(c) for o in meshes for c in o.bound_box]
+    points = [
+        o.matrix_world @ Vector(c)
+        for o in meshes
+        for c in o.bound_box
+    ]
+
     lo = Vector([min(p[i] for p in points) for i in range(3)])
     hi = Vector([max(p[i] for p in points) for i in range(3)])
+
     center = (lo + hi) / 2
     largest = max(hi - lo)
     if largest <= 0:
         msg = f"Zero-size model: {path}"
         raise RuntimeError(msg)
-    target = args.particle.max_dimension_units
+    target = args.particle.max_dimension_units*args.camera.unit_scale
     if target <= 0:
         raise RuntimeError("target-size must be positive")
     scale = target / largest
+    
     root = bpy.data.objects.new("Orientation", None)
     scene.collection.objects.link(root)
     transform = Matrix.Scale(scale, 4) @ Matrix.Translation(-center)
@@ -389,9 +411,9 @@ def main(settings=None):
         raise ValueError("Noise must be finite and nonnegative")
     if args.render.seed < 0:
         raise ValueError("seed must be nonnegative")
-    positive = (args.camera.distance_units, args.camera.focal_length_mm, args.camera.sensor_width_mm, args.particle.max_dimension_units)
-    if any(not math.isfinite(v) or v <= 0 for v in positive):
-        raise ValueError("Camera dimensions and target-size must be finite and positive")
+    # positive = (args.camera.distance_units, args.camera.focal_length_mm, args.camera.sensor_width_mm, args.particle.max_dimension_units)
+    # if any(not math.isfinite(v) or v <= 0 for v in positive):
+    #     raise ValueError("Camera dimensions and target-size must be finite and positive")
     if (
         not 0 <= args.render.background_intensity <= 1
         or not 0 <= args.particle.diffuse_grey <= 1

@@ -4,7 +4,7 @@ output_dir: output
 
 render:
   max_models: null              # How many OBJ models to process; null = all.
-  views_per_model: 1            # Number of image/depth pairs per model (e.g. 32).
+  views_per_model: 2            # Number of image/depth pairs per model (e.g. 32).
   samples_per_pixel: 128        # Cycles quality setting; NOT the image count.
   width_px: 491
   height_px: 368
@@ -17,10 +17,16 @@ render:
   seed: 0                       # Reproducible orientations and image noise.
 
 camera:
-  distance_units: 0.026         # Distance from the centered particle, in Blender units.
-  focal_length_mm: 123.6
-  sensor_width_mm: 4.16
+  unit_scale: 0.001
+  z_position: 1                # Camera z distance
+
+  type: "ORTHO"
+  pixels_per_um: 2.7
+
+  # type: "PERSP"
+  # focal_length_mm: 12.36
+  # sensor_width_mm: 4.16
 
 particle:
-  max_dimension_units: 0.0004   # Scale its largest dimension to this many Blender units.
+  max_dimension_units: 80      # Scale its largest dimension to this many Blender units.
   diffuse_grey: 0.5             # Linear surface reflectance: 0 = black, 1 = white.
